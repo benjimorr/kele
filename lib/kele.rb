@@ -1,9 +1,11 @@
 require 'HTTParty'
 require 'pp'
 require 'json'
+require_relative 'roadmap'
 
 class Kele
     include HTTParty
+    include Roadmap
 
     def initialize(email, password)
         @email = email
