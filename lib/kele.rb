@@ -3,11 +3,13 @@ require 'pp'
 require 'json'
 require_relative 'roadmap'
 require_relative 'messages'
+require_relative 'checkpoint'
 
 class Kele
     include HTTParty
     include Roadmap
     include Messages
+    include Checkpoint
 
     def initialize(email, password)
         @email = email
@@ -25,17 +27,5 @@ class Kele
     def get_mentor_availability(mentor_id)
         response = self.class.get(@base_uri + "/mentors/#{mentor_id}/student_availability", headers: { "authorization" => @user_auth })
         JSON.parse(response.body)
-    end
-
-    def create_submission(checkpoint_id, assignment_branch, assignment_commit_link, comment)
-        return "Error: enrollment_id is not defined. Use the #get_me method." unless defined? @enrollment_id
-        response = self.class.post(@base_uri + '/checkpoint_submissions', headers: { "authorization" => @user_auth },
-            body: {
-                "assignment_branch": assignment_branch,
-                "assignment_commit_link": assignment_commit_link,
-                "checkpoint_id": checkpoint_id,
-                "comment": comment,
-                "enrollment_id": @enrollment_id
-            })
     end
 end
